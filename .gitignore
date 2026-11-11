@@ -1,0 +1,27 @@
+# Entornos virtuales de Python
+venv/
+env/
+__pycache__/
+*.pyc
+db.sqlite3
+
+# Dependencias de Node/React
+node_modules/
+.env
+dist/
+build/
+
+# Archivos multimedia locales
+media/
+!media/.gitkeep
+
+# Logs y Pruebas
+*.log
+htmlcov/
+.coverage
+.pytest_cache/
+coverage/
+
+#Archivos de Sistema Operativo
+.DS_Store
+Thumbs.db
