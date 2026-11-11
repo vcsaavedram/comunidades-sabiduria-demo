@@ -3,7 +3,7 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django_mongodb_backend.models import EmbeddedModel
 from django_mongodb_backend.fields import ArrayField, EmbeddedModelField, EmbeddedModelArrayField
 
-# MODELOS EMBEBIDOS (Deben ir al principio)
+# Modelos embebios
 class DocumentoKYC(EmbeddedModel):
     """Sub-documento BSON para los archivos legales del organizador."""
     tipo_documento = models.CharField(max_length=50)
@@ -42,7 +42,7 @@ class Usuario(AbstractBaseUser):
     def __str__(self):
         return f"{self.correo} ({self.rol})"
 
-# COLECCIÓN CLIENTES
+# Colección clientes
 class PerfilCliente(models.Model):
     usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE, related_name='perfil_cliente')
     nombres = models.CharField(max_length=100)
@@ -67,7 +67,7 @@ class PerfilCliente(models.Model):
     def __str__(self):
         return f"Perfil Cliente: {self.nombres} {self.apellidos}"
 
-# COLECCIÓN ORGANIZADORES
+# Colección Organizadores
 class PerfilOrganizador(models.Model):
     usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE, related_name='perfil_organizador')
     nombres = models.CharField(max_length=100, null=True, blank=True)
