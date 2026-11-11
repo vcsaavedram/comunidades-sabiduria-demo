@@ -1,12 +1,12 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django_mongodb_backend.models import EmbeddedModel
-from django_mongodb_backend.fields import ArrayField, EmbeddedModelArrayField
+from django_mongodb_backend.fields import ArrayField, EmbeddedModelField, EmbeddedModelArrayField
 
 # MODELOS EMBEBIDOS (Deben ir al principio)
 class DocumentoKYC(EmbeddedModel):
     """Sub-documento BSON para los archivos legales del organizador."""
-    tipo_documento = models.CharField(max_length=50) # Ej: "RUT", "Antecedentes"
+    tipo_documento = models.CharField(max_length=50)
     ruta_archivo = models.CharField(max_length=255)
     estado = models.CharField(max_length=50, default="pendiente_revision")
 
@@ -47,6 +47,7 @@ class PerfilCliente(models.Model):
     usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE, related_name='perfil_cliente')
     nombres = models.CharField(max_length=100)
     apellidos = models.CharField(max_length=100)
+    nombre_a_mostrar = models.CharField(max_length=100, blank=True)
     fecha_nacimiento = models.DateField()
     foto_perfil = models.ImageField(upload_to='perfiles/clientes/', null=True, blank=True)
     descripcion = models.TextField(blank=True)
@@ -68,6 +69,7 @@ class PerfilCliente(models.Model):
 
 # COLECCIÓN ORGANIZADORES
 class PerfilOrganizador(models.Model):
+    usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE, related_name='perfil_organizador')
     nombres = models.CharField(max_length=100, null=True, blank=True)
     apellidos = models.CharField(max_length=100, null=True, blank=True)
     nombre_a_mostrar = models.CharField(max_length=100, blank=True)
@@ -78,7 +80,7 @@ class PerfilOrganizador(models.Model):
     razon_social = models.CharField(max_length=150, null=True, blank=True)
     estado_validacion = models.CharField(max_length=50, default="pendiente")
 
-    auditoria_identidad_interna = models.EmbeddedField(model_container=AuditoriaIdentidad, null=True, blank=True)
+    auditoria_identidad_interna = EmbeddedModelField(embedded_model=AuditoriaIdentidad, null=True, blank=True)
     documentos_kyc = EmbeddedModelArrayField(embedded_model=DocumentoKYC, default=list, blank=True)
 
     def __str__(self):
